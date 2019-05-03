@@ -1,4 +1,4 @@
-package Solutions;
+package Challenges2018;
 
 import java.io.File;
 import java.io.IOException;

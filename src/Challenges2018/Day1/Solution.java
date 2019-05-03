@@ -1,6 +1,6 @@
-package Solutions.Day1;
+package Challenges2018.Day1;
 
-import Solutions.InputReader;
+import Challenges2018.InputReader;
 
 import java.io.File;
 import java.io.IOException;
