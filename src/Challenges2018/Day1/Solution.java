@@ -48,7 +48,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        InputReader inputReader = new InputReader(new File("src/Solutions/Day1/input.txt"));
+        InputReader inputReader = new InputReader(new File("src/Challenges2018/Day1/input.txt"));
         System.out.println("First Puzzle Answer - " + puzzleOne(inputReader.getInput()));
         System.out.println("Second Puzzle Answer - " + puzzleTwo(inputReader.getInput()));
     }

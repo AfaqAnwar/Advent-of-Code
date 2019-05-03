@@ -40,12 +40,39 @@ public class Solution {
         return Integer.toString(twoCount * threeCount);
     }
 
+    /**
+     * Finds two Strings with the most amount of similar characters.
+     * @param input
+     * @return The characters which are similar between both Strings.
+     */
     public static String puzzleTwo(ArrayList<String> input) {
-        return "";
+        for (int i = 0; i < input.size() - 1; i++) {
+            String[] strArr = input.get(i).split("");
+            for (int j = i + 1; j < input.size(); j++) {
+                String[] strArrCompare = input.get(j).split("");
+                int different = 0;
+                int differentIndex = 0;
+                for (int k = 0; k < strArr.length; k++) {
+                    if (!strArr[k].equals(strArrCompare[k])) {
+                        different++;
+                        differentIndex = k;
+                    }
+                }
+                if (different == 1) {
+                    strArr[differentIndex] = "";
+                    String returnStr = "";
+                    for (String currChar : strArr) {
+                        returnStr += currChar;
+                    }
+                    return returnStr;
+                }
+            }
+        }
+        return "ERROR";
     }
 
     public static void main(String[] args) throws IOException {
-        InputReader inputReader = new InputReader(new File("src/Solutions/Day2/input.txt"));
+        InputReader inputReader = new InputReader(new File("src/Challenges2018/Day2/input.txt"));
         System.out.println("First Puzzle Answer - " + puzzleOne(inputReader.getInput()));
         System.out.println("Second Puzzle Answer - " + puzzleTwo(inputReader.getInput()));
     }
