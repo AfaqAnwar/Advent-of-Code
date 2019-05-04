@@ -17,7 +17,7 @@ public class InputReader {
         Scanner inputScanner = new Scanner(inputFile);
         this.input = new ArrayList<>();
         while (inputScanner.hasNext()) {
-            input.add(inputScanner.next());
+            input.add(inputScanner.nextLine());
         }
         inputScanner.close();
     }
