@@ -11,10 +11,12 @@ import java.util.HashMap;
 /**
  * Solutions to the Day Four Puzzles.
  * @Author Afaq Anwar
- * @Version 05/07/2019
+ * @Version 05/09/2019
  */
 public class Solution {
     public static String puzzleOne(ArrayList<String> input) {
+        Collections.sort(input);
+
         return "";
     }
 
