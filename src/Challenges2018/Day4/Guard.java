@@ -24,8 +24,10 @@ public class Guard {
 
     public int getId() { return this.id; }
 
-    public HashMap<String, int[]> getScheduleLog() { return this.scheduleLog; }
-
+    /**
+     * Updates the HashMap of Arrays that contain the schedules based upon a given List of logs.
+     * @param log ArrayList of Strings that contain all activities of the current Guard.
+     */
     public void updateMinutes(ArrayList<String> log) {
         int start = 0;
         int end = 0;
@@ -73,6 +75,18 @@ public class Guard {
         return total;
     }
 
+    /**
+     * The most frequent minute is the one where the Guard is asleep the most.
+     * Example:
+     * * * * * * * * * * *
+     * 01 02 03 04 05 06 07
+     * 0  1  1  0  0  0  0
+     * 1  1  1  0  0  0  0
+     * 0  1  0  0  0  0  0
+     * * * * * * * * * * *
+     * In this case the third minute is the most frequent minute.
+     * @return The minute with the most sleep.
+     */
     public int getMostFrequentMinute() {
         HashMap<Integer, Integer> minuteMap = new HashMap<>();
         for (int[] log : scheduleLog.values()) {
