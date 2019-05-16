@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Gaurd Class
+ * Guard Class
  * This was made in order to keep things a little more organized.
  * @Author Afaq Anwar
- * @Version 05/14/2019
+ * @Version 05/15/2019
  */
 public class Guard {
     private int id;
@@ -76,6 +76,27 @@ public class Guard {
     }
 
     /**
+     * @return HashMap that represents the amount a Guard has been asleep at each specific minute.
+     */
+    public HashMap<Integer, Integer> getMinuteMap() {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int[] log : scheduleLog.values()) {
+            for (int i = 0; i < log.length; i++) {
+                if (log[i] == 1) {
+                    if (!map.containsKey(i)) {
+                        map.put(i, 1);
+                    } else {
+                        int current = map.get(i);
+                        current++;
+                        map.replace(i, current);
+                    }
+                }
+            }
+        }
+        return map;
+    }
+
+    /**
      * The most frequent minute is the one where the Guard is asleep the most.
      * Example:
      * * * * * * * * * * *
@@ -88,20 +109,7 @@ public class Guard {
      * @return The minute with the most sleep.
      */
     public int getMostFrequentMinute() {
-        HashMap<Integer, Integer> minuteMap = new HashMap<>();
-        for (int[] log : scheduleLog.values()) {
-            for (int i = 0; i < log.length; i++) {
-                if (log[i] == 1) {
-                    if (!minuteMap.containsKey(i)) {
-                        minuteMap.put(i, 1);
-                    } else {
-                        int current = minuteMap.get(i);
-                        current++;
-                        minuteMap.replace(i, current);
-                    }
-                }
-            }
-        }
+        HashMap<Integer, Integer> minuteMap = getMinuteMap();
         int greatest = 0;
         for (int key : minuteMap.keySet()) {
             if (minuteMap.get(key) > greatest) {

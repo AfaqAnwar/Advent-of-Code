@@ -11,12 +11,14 @@ import java.util.HashMap;
 /**
  * Solutions to the Day Four Puzzles.
  * @Author Afaq Anwar
- * @Version 05/14/2019
+ * @Version 05/15/2019
  */
 public class Solution {
+    private static ArrayList<Guard> guards = new ArrayList<>();
+
+    // Finds the Guard that is asleep the most.
     public static String puzzleOne(ArrayList<String> input) {
         Collections.sort(input);
-        ArrayList<Guard> guards = new ArrayList<>();
         for (int i = 0; i < input.size() - 1; i++) {
             String statusKeyword = input.get(i).split(" ")[3];
             if (!statusKeyword.equals("asleep") && !statusKeyword.equals("up")) {
@@ -49,6 +51,7 @@ public class Solution {
         return Integer.toString(laziestGuard.getMostFrequentMinute() * laziestGuard.getId());
     }
 
+    // Self-Explanatory Helper Methods.
     public static ArrayList<String> generateLogList(ArrayList<String> input, int start, int end) {
         ArrayList<String> log = new ArrayList<>();
         for (int i = start; i < end; i++) {
@@ -93,8 +96,23 @@ public class Solution {
         return chosen;
     }
 
+    // Finds the Guard with asleep the most on the same minute.
     public static String puzzleTwo() {
-        return "";
+        int minute = 0;
+        int amount = 0;
+        Guard chosen = null;
+        for (Guard guard : guards) {
+            // If the guard has no logs, it will skip over to avoid a Null Pointer Exception.
+            if (guard.getMinuteMap().size() != 0 && guard.getMostFrequentMinute() != 0) {
+                int currentAmount = guard.getMinuteMap().get(guard.getMostFrequentMinute());
+                if (currentAmount > amount) {
+                    amount = currentAmount;
+                    minute = guard.getMostFrequentMinute();
+                    chosen = guard;
+                }
+            }
+        }
+        return Integer.toString(minute * chosen.getId());
     }
 
     public static void main(String[] args) throws IOException {
