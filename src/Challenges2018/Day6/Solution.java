@@ -1,12 +1,10 @@
 package Challenges2018.Day6;
 
-import Challenges2018.Day4.Guard;
 import Challenges2018.InputReader;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Solutions to the Day Six Puzzles.
