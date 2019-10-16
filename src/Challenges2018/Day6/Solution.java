@@ -33,7 +33,15 @@ public class Solution {
                 verticalBound = currPoint.getPointY();
             }
         }
-        return new Point[horizontalBound][verticalBound];
+
+        Point[][] grid = new Point[horizontalBound][verticalBound];
+        for (int x = 0; x < grid.length; x++) {
+            for (int y = 0; y < grid[x].length; y++) {
+                grid[x][y] = new Point(x, y, false);
+            }
+        }
+
+        return grid;
     }
 
     public static String puzzleTwo(ArrayList<String> input) {
