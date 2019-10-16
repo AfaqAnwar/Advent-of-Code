@@ -10,7 +10,7 @@ import java.util.HashMap;
 /**
  * Solutions to the Day Six Puzzles.
  * @Author Afaq Anwar
- * @Version 10/15/2019
+ * @Version 10/16/2019
  */
 public class Solution {
     public static String puzzleOne(ArrayList<String> input) {
@@ -20,8 +20,7 @@ public class Solution {
             allPoints.add(new Point(Integer.parseInt(splitLocations[0].trim()), Integer.parseInt(splitLocations[1].trim())));
         }
         Point[][] grid = generateGrid(allPoints);
-        // HashMap stores two points, current and given if they are locked and their distances.
-        HashMap<Point, Integer> pointAssociation = new HashMap<>();
+
         // Points that should not be checked. Initially just the given points.
         ArrayList<Point> redundantPoints = new ArrayList<>(allPoints);
         for (Point givenPoint : allPoints) {
@@ -29,17 +28,18 @@ public class Solution {
                 for (Point currentPoint : pointRow) {
                     if (!redundantPoints.contains(currentPoint)) {
                         int distance = Math.abs(givenPoint.getPointX() - currentPoint.getPointX()) + Math.abs(givenPoint.getPointY() - currentPoint.getPointY());
-                        if (!pointAssociation.containsKey(currentPoint)) {
-                            pointAssociation.put(currentPoint, distance);
+                        if (!currentPoint.isAssociated()) {
                             currentPoint.setAssociated(true);
                             currentPoint.setAssociatedPoint(givenPoint);
-                        } else if (pointAssociation.containsKey(currentPoint)) {
-                            int prevDistToPrevPoint = pointAssociation.get(currentPoint);
+                            currentPoint.setDistanceFromAssociatedPoint(distance);
+                        } else {
+                            int prevDistToPrevPoint = currentPoint.getDistanceFromAssociatedPoint();
                             if (prevDistToPrevPoint > distance) {
-                                pointAssociation.replace(currentPoint, distance);
                                 currentPoint.setAssociatedPoint(givenPoint);
+                                currentPoint.setDistanceFromAssociatedPoint(distance);
                             } else if (prevDistToPrevPoint == distance) {
                                 currentPoint.setAssociated(false);
+                                currentPoint.setAssociatedPoint(null);
                                 redundantPoints.add(currentPoint);
                             }
                         }
@@ -47,6 +47,30 @@ public class Solution {
                 }
             }
         }
+
+        for (Point[] row : grid) {
+            for (Point point : row) {
+                if (point.isAssociated()) {
+                    System.out.print(" [" + point.getAssociatedPoint().getPointX() + ", " + point.getAssociatedPoint().getPointY() + "] ");
+                } else {
+                    System.out.print(" [ . ] ");
+                }
+            }
+            System.out.println();
+        }
+
+        ArrayList<Point> infinitePoints = new ArrayList<>();
+        infinitePoints.add(grid[0][0].getAssociatedPoint());
+        infinitePoints.add(grid[grid.length - 1][0].getAssociatedPoint());
+        infinitePoints.add(grid[0][grid[0].length - 1].getAssociatedPoint());
+        infinitePoints.add(grid[grid.length - 1][grid[grid.length - 1].length - 1].getAssociatedPoint());
+
+        HashMap<Point, Integer> pointArea = calculateArea(grid, infinitePoints);
+
+        for (Point key : pointArea.keySet()) {
+            System.out.println(key.getPointX() + ", " + key.getPointY() + " - " + pointArea.get(key));
+        }
+
         return "";
     }
 
@@ -70,6 +94,23 @@ public class Solution {
         }
 
         return grid;
+    }
+
+    public static HashMap<Point, Integer> calculateArea (Point[][] grid, ArrayList<Point> infinitePoints) {
+        HashMap<Point, Integer> pointArea = new HashMap<>();
+        for (Point[] row : grid) {
+            for (Point point : row) {
+                Point associatedPoint = point.getAssociatedPoint();
+                if (!infinitePoints.contains(associatedPoint) && point.isAssociated()) {
+                    if (pointArea.containsKey(associatedPoint)) {
+                        pointArea.replace(associatedPoint, pointArea.get(associatedPoint) + 1);
+                    } else {
+                        pointArea.put(associatedPoint, 1);
+                    }
+                }
+            }
+        }
+        return pointArea;
     }
 
     public static String puzzleTwo(ArrayList<String> input) {

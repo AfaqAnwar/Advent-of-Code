@@ -5,6 +5,7 @@ public class Point {
     private int yPoint;
     private boolean associated;
     private Point associatedPoint;
+    private int distanceFromAssociatedPoint;
 
     public Point(int xPoint, int yPoint) {
         this.xPoint = xPoint;
@@ -20,4 +21,7 @@ public class Point {
 
     public Point getAssociatedPoint() { return this.associatedPoint; }
     public void setAssociatedPoint(Point associatedPoint) { this.associatedPoint = associatedPoint; }
+
+    public int getDistanceFromAssociatedPoint() { return distanceFromAssociatedPoint; }
+    public void setDistanceFromAssociatedPoint(int distanceFromAssociatedPoint) { this.distanceFromAssociatedPoint = distanceFromAssociatedPoint; }
 }
