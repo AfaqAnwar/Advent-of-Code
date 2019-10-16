@@ -17,16 +17,22 @@ public class Solution {
         ArrayList<Point> allPoints = new ArrayList<>();
         for (String line : input) {
             String[] splitLocations = line.split(",");
-            allPoints.add(new Point(Integer.parseInt(splitLocations[0].trim()), Integer.parseInt(splitLocations[1].trim())));
+            Point point = new Point(Integer.parseInt(splitLocations[0].trim()), Integer.parseInt(splitLocations[1].trim()));
+            point.setAssociated(true);
+            point.setAssociatedPoint(point);
+            point.setDistanceFromAssociatedPoint(0);
+            allPoints.add(point);
         }
         Point[][] grid = generateGrid(allPoints);
 
         // Points that should not be checked. Initially just the given points.
         ArrayList<Point> redundantPoints = new ArrayList<>(allPoints);
-        for (Point givenPoint : allPoints) {
-            for (Point[] pointRow : grid) {
-                for (Point currentPoint : pointRow) {
-                    if (!redundantPoints.contains(currentPoint)) {
+
+        //Rework
+        for (Point[] pointRow : grid) {
+            for (Point currentPoint : pointRow) {
+                if (!redundantPoints.contains(currentPoint)) {
+                    for (Point givenPoint : allPoints) {
                         int distance = Math.abs(givenPoint.getPointX() - currentPoint.getPointX()) + Math.abs(givenPoint.getPointY() - currentPoint.getPointY());
                         if (!currentPoint.isAssociated()) {
                             currentPoint.setAssociated(true);
@@ -40,6 +46,7 @@ public class Solution {
                             } else if (prevDistToPrevPoint == distance) {
                                 currentPoint.setAssociated(false);
                                 currentPoint.setAssociatedPoint(null);
+                                currentPoint.setDistanceFromAssociatedPoint(0);
                                 redundantPoints.add(currentPoint);
                             }
                         }
@@ -48,12 +55,13 @@ public class Solution {
             }
         }
 
+        // Debug
         for (Point[] row : grid) {
             for (Point point : row) {
                 if (point.isAssociated()) {
                     System.out.print(" [" + point.getAssociatedPoint().getPointX() + ", " + point.getAssociatedPoint().getPointY() + "] ");
                 } else {
-                    System.out.print(" [ . ] ");
+                    System.out.print(" [ .  ] ");
                 }
             }
             System.out.println();
@@ -86,7 +94,7 @@ public class Solution {
             }
         }
 
-        Point[][] grid = new Point[horizontalBound][verticalBound];
+        Point[][] grid = new Point[horizontalBound + 2][horizontalBound + 2];
         for (int x = 0; x < grid.length; x++) {
             for (int y = 0; y < grid[x].length; y++) {
                 grid[x][y] = new Point(x, y);

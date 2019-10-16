@@ -24,4 +24,9 @@ public class Point {
 
     public int getDistanceFromAssociatedPoint() { return distanceFromAssociatedPoint; }
     public void setDistanceFromAssociatedPoint(int distanceFromAssociatedPoint) { this.distanceFromAssociatedPoint = distanceFromAssociatedPoint; }
+
+    @Override
+    public String toString() {
+        return this.xPoint + ", " + this.yPoint;
+    }
 }
