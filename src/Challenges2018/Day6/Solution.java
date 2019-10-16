@@ -9,10 +9,15 @@ import java.util.ArrayList;
 /**
  * Solutions to the Day Six Puzzles.
  * @Author Afaq Anwar
- * @Version 06/14/2019
+ * @Version 10/15/2019
  */
 public class Solution {
     public static String puzzleOne(ArrayList<String> input) {
+        ArrayList<Point> allPoints = new ArrayList<>();
+        for (String line : input) {
+            String[] splitLocations = line.split(",");
+            allPoints.add(new Point(Integer.parseInt(splitLocations[0].trim()), Integer.parseInt(splitLocations[1].trim()), false));
+        }
         return "";
     }
 
