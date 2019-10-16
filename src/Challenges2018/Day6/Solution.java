@@ -18,7 +18,22 @@ public class Solution {
             String[] splitLocations = line.split(",");
             allPoints.add(new Point(Integer.parseInt(splitLocations[0].trim()), Integer.parseInt(splitLocations[1].trim()), false));
         }
+        Point[][] grid = generateGrid(allPoints);
         return "";
+    }
+
+    public static Point[][] generateGrid(ArrayList<Point> points) {
+        int horizontalBound = 0;
+        int verticalBound = 0;
+        for (Point currPoint : points) {
+            if (currPoint.getPointX() > horizontalBound) {
+                horizontalBound = currPoint.getPointX();
+            }
+            if (currPoint.getPointY() > verticalBound) {
+                verticalBound = currPoint.getPointY();
+            }
+        }
+        return new Point[horizontalBound][verticalBound];
     }
 
     public static String puzzleTwo(ArrayList<String> input) {
