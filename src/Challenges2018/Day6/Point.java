@@ -1,5 +1,10 @@
 package Challenges2018.Day6;
 
+/**
+ * Class that represents a Point on the "infinite" grid.
+ * @Author Afaq Anwar
+ * @Version 10/20/2019
+ */
 public class Point {
     private int xPoint;
     private int yPoint;

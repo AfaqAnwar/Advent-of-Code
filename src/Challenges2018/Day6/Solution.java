@@ -5,12 +5,13 @@ import Challenges2018.InputReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
  * Solutions to the Day Six Puzzles.
  * @Author Afaq Anwar
- * @Version 10/16/2019
+ * @Version 10/20/2019
  */
 public class Solution {
     public static String puzzleOne(ArrayList<String> input) {
@@ -23,16 +24,16 @@ public class Solution {
             point.setDistanceFromAssociatedPoint(0);
             allPoints.add(point);
         }
-        Point[][] grid = generateGrid(allPoints);
 
+        Point[][] grid = generateGrid(allPoints);
         // Points that should not be checked. Initially just the given points.
         ArrayList<Point> redundantPoints = new ArrayList<>(allPoints);
 
-        //Rework
         for (Point[] pointRow : grid) {
             for (Point currentPoint : pointRow) {
-                if (!redundantPoints.contains(currentPoint)) {
-                    for (Point givenPoint : allPoints) {
+                boolean isRedundant = false;
+                for (Point givenPoint : allPoints) {
+                    if (!redundantPoints.contains(currentPoint)) {
                         int distance = Math.abs(givenPoint.getPointX() - currentPoint.getPointX()) + Math.abs(givenPoint.getPointY() - currentPoint.getPointY());
                         if (!currentPoint.isAssociated()) {
                             currentPoint.setAssociated(true);
@@ -41,45 +42,30 @@ public class Solution {
                         } else {
                             int prevDistToPrevPoint = currentPoint.getDistanceFromAssociatedPoint();
                             if (prevDistToPrevPoint > distance) {
+                                isRedundant = false;
                                 currentPoint.setAssociatedPoint(givenPoint);
                                 currentPoint.setDistanceFromAssociatedPoint(distance);
                             } else if (prevDistToPrevPoint == distance) {
-                                currentPoint.setAssociated(false);
-                                currentPoint.setAssociatedPoint(null);
-                                currentPoint.setDistanceFromAssociatedPoint(0);
-                                redundantPoints.add(currentPoint);
+                                isRedundant = true;
                             }
                         }
                     }
                 }
-            }
-        }
-
-        // Debug
-        for (Point[] row : grid) {
-            for (Point point : row) {
-                if (point.isAssociated()) {
-                    System.out.print(" [" + point.getAssociatedPoint().getPointX() + ", " + point.getAssociatedPoint().getPointY() + "] ");
-                } else {
-                    System.out.print(" [ .  ] ");
+                // Redundancy is acted upon after testing against all cases.
+                if (isRedundant) {
+                    currentPoint.setAssociated(false);
+                    currentPoint.setAssociatedPoint(null);
+                    currentPoint.setDistanceFromAssociatedPoint(0);
+                    redundantPoints.add(currentPoint);
                 }
             }
-            System.out.println();
         }
 
-        ArrayList<Point> infinitePoints = new ArrayList<>();
-        infinitePoints.add(grid[0][0].getAssociatedPoint());
-        infinitePoints.add(grid[grid.length - 1][0].getAssociatedPoint());
-        infinitePoints.add(grid[0][grid[0].length - 1].getAssociatedPoint());
-        infinitePoints.add(grid[grid.length - 1][grid[grid.length - 1].length - 1].getAssociatedPoint());
+        ArrayList<Point> infinitePoints = findInfinitePoints(grid);
 
         HashMap<Point, Integer> pointArea = calculateArea(grid, infinitePoints);
 
-        for (Point key : pointArea.keySet()) {
-            System.out.println(key.getPointX() + ", " + key.getPointY() + " - " + pointArea.get(key));
-        }
-
-        return "";
+        return Integer.toString(findGreatestPointIntegerMapValue(pointArea));
     }
 
     public static Point[][] generateGrid(ArrayList<Point> points) {
@@ -94,10 +80,16 @@ public class Solution {
             }
         }
 
-        Point[][] grid = new Point[horizontalBound + 2][horizontalBound + 2];
+        Point[][] grid;
+        if (horizontalBound > verticalBound) {
+            grid = new Point[horizontalBound + 1][horizontalBound + 1];
+        } else {
+            grid = new Point[verticalBound + 1][verticalBound + 1];
+        }
+
         for (int x = 0; x < grid.length; x++) {
             for (int y = 0; y < grid[x].length; y++) {
-                grid[x][y] = new Point(x, y);
+                grid[y][x] = new Point(x, y);
             }
         }
 
@@ -119,6 +111,40 @@ public class Solution {
             }
         }
         return pointArea;
+    }
+
+    public static ArrayList<Point> findInfinitePoints (Point[][] pointMap) {
+        ArrayList<Point> infinitePoints = new ArrayList<>();
+        for (int x = 0; x < pointMap.length; x++) {
+            if (x == 0 || x == pointMap.length - 1) {
+                for (int y = 1; y < pointMap[x].length; y++) {
+                    if (pointMap[x][y].isAssociated()) {
+                        if (!infinitePoints.contains(pointMap[x][y].getAssociatedPoint())) {
+                            infinitePoints.add(pointMap[x][y].getAssociatedPoint());
+                        }
+                    }
+                }
+            }
+            if (pointMap[x][0].isAssociated() && pointMap[x][pointMap[x].length - 1].isAssociated()) {
+                if (!infinitePoints.contains(pointMap[x][0].getAssociatedPoint())) {
+                    infinitePoints.add(pointMap[x][0].getAssociatedPoint());
+                }
+                if (!infinitePoints.contains(pointMap[x][pointMap[x].length - 1].getAssociatedPoint())) {
+                    infinitePoints.add(pointMap[x][pointMap[x].length - 1].getAssociatedPoint());
+                }
+            }
+        }
+        return infinitePoints;
+    }
+
+    public static int findGreatestPointIntegerMapValue (HashMap<Point, Integer> map) {
+        int value = 0;
+        for (int i : map.values()) {
+            if (i > value) {
+                value = i;
+            }
+        }
+        return value;
     }
 
     public static String puzzleTwo(ArrayList<String> input) {
