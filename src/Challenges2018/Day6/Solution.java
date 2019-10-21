@@ -13,8 +13,11 @@ import java.util.HashMap;
  * @Version 10/20/2019
  */
 public class Solution {
+    static Point[][] grid;
+    static ArrayList<Point> allPoints;
+
     public static String puzzleOne(ArrayList<String> input) {
-        ArrayList<Point> allPoints = new ArrayList<>();
+        allPoints = new ArrayList<>();
         for (String line : input) {
             String[] splitLocations = line.split(",");
             Point point = new Point(Integer.parseInt(splitLocations[0].trim()), Integer.parseInt(splitLocations[1].trim()));
@@ -24,7 +27,7 @@ public class Solution {
             allPoints.add(point);
         }
 
-        Point[][] grid = generateGrid(allPoints);
+        grid = generateGrid(allPoints);
         // Points that should not be checked. Initially just the given points.
         ArrayList<Point> redundantPoints = new ArrayList<>(allPoints);
 
@@ -147,7 +150,19 @@ public class Solution {
     }
 
     public static String puzzleTwo(ArrayList<String> input) {
-        return "";
+        ArrayList<Point> safePoints = new ArrayList<>();
+        for (Point[] pointRow : grid) {
+            for (Point point : pointRow) {
+                int totalDistance = 0;
+                for (Point givenPoint : allPoints) {
+                    totalDistance += Math.abs(givenPoint.getPointX() - point.getPointX()) + Math.abs(givenPoint.getPointY() - point.getPointY());
+                }
+                if (totalDistance <= 10000) {
+                    safePoints.add(point);
+                }
+            }
+        }
+        return Integer.toString(safePoints.size());
     }
 
     public static void main(String[] args) throws IOException {
