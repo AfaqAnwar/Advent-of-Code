@@ -10,7 +10,7 @@ import java.util.HashMap;
 /**
  * Solutions to the Day Six Puzzles.
  * @Author Afaq Anwar
- * @Version 10/20/2019
+ * @Version 10/24/2019
  */
 public class Solution {
     static Point[][] grid;
@@ -70,6 +70,10 @@ public class Solution {
         return Integer.toString(findGreatestPointIntegerMapValue(pointArea));
     }
 
+    /**
+     * @param points ArrayList of Points.
+     * @return 2D Array of Points that represents a finite map.
+     */
     public static Point[][] generateGrid(ArrayList<Point> points) {
         int horizontalBound = 0;
         int verticalBound = 0;
@@ -98,6 +102,11 @@ public class Solution {
         return grid;
     }
 
+    /**
+     * @param grid 2D Array of Points.
+     * @param infinitePoints ArrayList that contains all the infinite points that shouldn't be checked.
+     * @return HashMap with all finite point areas.
+     */
     public static HashMap<Point, Integer> calculateArea (Point[][] grid, ArrayList<Point> infinitePoints) {
         HashMap<Point, Integer> pointArea = new HashMap<>();
         for (Point[] row : grid) {
@@ -115,6 +124,11 @@ public class Solution {
         return pointArea;
     }
 
+    /**
+     * @param pointMap 2D Array of Points.
+     * @return ArrayList of all Points that are considered infinite.
+     * Infinite points are all Points that are, or have associated points, on the border of the grid.
+     */
     public static ArrayList<Point> findInfinitePoints (Point[][] pointMap) {
         ArrayList<Point> infinitePoints = new ArrayList<>();
         for (int x = 0; x < pointMap.length; x++) {
@@ -139,6 +153,10 @@ public class Solution {
         return infinitePoints;
     }
 
+    /**
+     * @param map HashMap of Points and their respective areas.
+     * @return Integer value of largest area.
+     */
     public static int findGreatestPointIntegerMapValue (HashMap<Point, Integer> map) {
         int value = 0;
         for (int i : map.values()) {
