@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Solutions to the Day Seven Puzzles.
  * @Author Afaq Anwar
- * @Version 10/24/2019
+ * @Version 11/05/2019
  */
 public class Solution {
     public static String puzzleOne(ArrayList<String> input) {
@@ -22,7 +22,7 @@ public class Solution {
     }
 
     public static void main(String[] args) throws IOException {
-        InputReader inputReader = new InputReader(new File("src/Challenges2018/Day6/input.txt"));
+        InputReader inputReader = new InputReader(new File("src/Challenges2018/Day7/input.txt"));
         System.out.println("First Puzzle Answer - " + puzzleOne(inputReader.getInput()));
         System.out.println("Second Puzzle Answer - " + puzzleTwo(inputReader.getInput()));
     }
