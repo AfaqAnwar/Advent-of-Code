@@ -1,6 +1,6 @@
 package Challenges2018.Day6;
 
-import Challenges2018.InputReader;
+import Utilities.InputReader;
 
 import java.io.File;
 import java.io.IOException;
