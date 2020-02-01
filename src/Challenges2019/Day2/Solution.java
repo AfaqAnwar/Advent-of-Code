@@ -1,6 +1,7 @@
 package Challenges2019.Day2;
 
 import Utilities.InputReader;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,9 +36,35 @@ public class Solution {
         return intcodeList[0];
     }
 
-    // Finds the amount of fuel needed for each module.
+    // Finds needed values for the noun and verb. Could have been made simpler without duplicated code.
     public static String puzzleTwo(ArrayList<String> input) {
-        return "";
+        String[] intcodeList = input.get(0).split(",");
+        for (int noun = 0; noun < 100; noun++) {
+            for (int verb = 0; verb < 100; verb++) {
+                String[] list = intcodeList.clone();
+                int count = 0;
+                String opcode = list[count];
+                list[1] = Integer.toString(noun);
+                list[2] = Integer.toString(verb);
+                while (!opcode.equals("99") && count + 3 <= list.length) {
+                    int firstPos = Integer.parseInt(list[count + 1]);
+                    int secondPos = Integer.parseInt(list[count + 2]);
+                    int placement = Integer.parseInt(list[count + 3]);
+                    if (opcode.equals("1")) {
+                        // Could have been made simpler by making the initial array and Integer array.
+                        list[placement] = Integer.toString(Integer.parseInt(list[firstPos]) + Integer.parseInt(list[secondPos]));
+                    } else if (opcode.equals("2")) {
+                        list[placement] = Integer.toString(Integer.parseInt(list[firstPos]) * Integer.parseInt(list[secondPos]));
+                    }
+                    count += 4;
+                    opcode = list[count];
+                }
+                if (list[0].equals("19690720")) {
+                    return Integer.toString(100 * noun + verb);
+                }
+            }
+        }
+        return "Failed";
     }
 
     public static void main(String[] args) throws IOException {
